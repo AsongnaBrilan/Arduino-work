@@ -19,8 +19,8 @@
  * 
  * ////////////////////////////// STEERING ANGLE DATA FOR LEVON100 ///////////////////////////
  * 
- * MIN_A = 0
- * MAX_A = 0
+ * MIN_A = 25
+ * MAX_A = 100
  * 
  * MIN_B = 20;
  * MAX_B = 140;
@@ -38,9 +38,9 @@ Servo steeringDir_A;
 Servo steeringDir_B;
 
 int steeringAng_A = 0;  //variable to hold the required steering angles.
-int steeringAng_B = 140;  // ranges from 0 - 140 degrees
+int steeringAng_B = 0;  // ranges from 0 - 140 degrees
 
-int set_speed = 0;
+int set_speed = 100;  //using the  L293D, the min set_speed should be 100
 
 //int pos = 20; // for testing the functionality of the servos
 
@@ -48,8 +48,8 @@ int set_speed = 0;
 #define buzz 5
 
 ////////////////////////////////// motors ////////////////////////////////
-AF_DCMotor motorDir_A(2);
-AF_DCMotor motorDir_B(1);
+AF_DCMotor motorDir_A(3);
+AF_DCMotor motorDir_B(4);
 
 ////////////////////////////////// LAMPS ////////////////////////////////
 
@@ -70,8 +70,42 @@ void setup()
 ////////////////////////////////// void loop ///////////////////////////
 void loop()
 {
-  steeringDir_A.write(steeringAng_A);
-  steeringDir_B.write(steeringAng_B);
-  motorDir_B.run(FORWARD);
+  steering_B_test();
+  steering_A_test();
+}
+
+void steering_A_test()
+{
+  for (steeringAng_A = 25; steeringAng_A <= 100; steeringAng_A++)
+  {
+    steeringDir_A.write(steeringAng_A);
+    delay(5);
+  }
+
+  for (steeringAng_A = 100; steeringAng_A >= 25; steeringAng_A--)
+  {
+    steeringDir_A.write(steeringAng_A);
+    delay(5);
+  }
+
   motorDir_A.run(FORWARD);
+}
+
+void steering_B_test()
+{
+  //steeringDir_B.write(steeringAng_B);
+  
+  for (steeringAng_B=50; steeringAng_B <= 150; steeringAng_B++)
+  {
+    steeringDir_B.write(steeringAng_B);
+    delay(5);
+  }
+
+  for (steeringAng_B=150; steeringAng_B >= 50; steeringAng_B--)
+  {
+    steeringDir_B.write(steeringAng_B);
+    delay(5);
+  }
+
+  motorDir_B.run(FORWARD);
 }
